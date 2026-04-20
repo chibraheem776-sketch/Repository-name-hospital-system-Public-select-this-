@@ -7,106 +7,121 @@
 
 <style>
 
+/* BACKGROUND */
 body {
-    transition: 0.4s;
-}
-
-/* LIGHT MODE */
-.light-mode {
-    background: linear-gradient(120deg, #84fab0, #8fd3f4);
-    color: black;
-}
-
-/* DARK MODE */
-.dark-mode {
-    background: #121212;
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    font-family: 'Segoe UI', sans-serif;
     color: white;
 }
 
-.dark-mode .card {
-    background: #1e1e1e;
-    color: white;
-}
-
-.card {
+/* GLASS EFFECT */
+.glass {
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(12px);
     border-radius: 15px;
-    animation: fadeIn 0.8s ease-in-out;
-}
-
-@keyframes fadeIn {
-    from {opacity: 0; transform: translateY(20px);}
-    to {opacity: 1;}
-}
-
-.btn:hover {
-    transform: scale(1.05);
-    transition: 0.3s;
+    padding: 20px;
 }
 
 /* NAVBAR */
 .navbar-custom {
-    background: rgba(0,0,0,0.2);
-    padding: 10px;
-    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.toggle-btn {
-    cursor: pointer;
+/* BUTTONS */
+.btn-premium {
+    border: none;
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.btn-premium:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+}
+
+.btn-dashboard { background: #3a7bd5; color: white; }
+.btn-doctors { background: #00c6ff; color: white; }
+.btn-appointments { background: #00d2ff; color: white; }
+.btn-admin { background: #f7971e; color: white; }
+.btn-logout { background: #ff4b2b; color: white; }
+
+/* CARD */
+.card-custom {
+    background: white;
+    color: black;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+/* INPUT */
+input {
+    border-radius: 10px !important;
+}
+
+/* TABLE */
+.table {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
 </style>
 
 </head>
 
-<body class="light-mode" id="body">
+<body>
 
 <div class="container mt-4">
 
-<!-- HEADER + NAVBAR -->
-<div class="d-flex justify-content-between align-items-center mb-3">
+<!-- NAVBAR -->
+<div class="navbar-custom mb-4">
 
-<h2>🏥 Hospital Management System</h2>
+<h3>🏥 Hospital System</h3>
 
 <div class="d-flex gap-2">
-
-<a href="/dashboard" class="btn btn-primary">Dashboard</a>
-<a href="/doctors" class="btn btn-info">Doctors</a>
-<a href="/appointments" class="btn btn-success">Appointments</a>
-<a href="/admin" class="btn btn-warning">Admin</a>
-
-<button onclick="toggleMode()" class="btn btn-secondary toggle-btn">
-🌙
-</button>
-
-<a href="/logout" class="btn btn-danger">Logout</a>
-
+<a href="/dashboard" class="btn btn-premium btn-dashboard">Dashboard</a>
+<a href="/doctors" class="btn btn-premium btn-doctors">Doctors</a>
+<a href="/appointments" class="btn btn-premium btn-appointments">Appointments</a>
+<a href="/admin" class="btn btn-premium btn-admin">Admin</a>
+<a href="/logout" class="btn btn-premium btn-logout">Logout</a>
 </div>
+
 </div>
 
 <!-- SEARCH -->
-<form method="GET" class="mb-3">
+<div class="glass mb-3">
+<form method="GET">
 <input name="search" placeholder="🔍 Search patient..." class="form-control">
 </form>
-
-<!-- STATS -->
-<div class="card p-3 mb-3 bg-primary text-white">
-<h5>Total Patients</h5>
-<h2>{{ total }}</h2>
 </div>
 
-<!-- ADD -->
-<div class="card p-3 mb-3">
+<!-- STATS -->
+<div class="glass mb-3 text-center">
+<h5>Total Patients</h5>
+<h1>{{ total }}</h1>
+</div>
+
+<!-- ADD PATIENT -->
+<div class="card-custom">
 <h4>Add Patient</h4>
+
 <form action="/add" method="POST">
 <input name="name" class="form-control mb-2" placeholder="Name" required>
 <input name="age" class="form-control mb-2" placeholder="Age" required>
 <input name="disease" class="form-control mb-2" placeholder="Disease" required>
+
 <button class="btn btn-primary w-100">Add Patient</button>
 </form>
 </div>
 
 <!-- TABLE -->
-<div class="card p-3">
+<div class="card-custom">
+
 <table class="table table-striped">
 <tr>
 <th>Name</th>
@@ -129,34 +144,10 @@ body {
 {% endfor %}
 
 </table>
-</div>
 
 </div>
 
-<!-- JS -->
-<script>
-function toggleMode() {
-    let body = document.getElementById("body");
-
-    if (body.classList.contains("light-mode")) {
-        body.classList.remove("light-mode");
-        body.classList.add("dark-mode");
-        localStorage.setItem("mode", "dark");
-    } else {
-        body.classList.remove("dark-mode");
-        body.classList.add("light-mode");
-        localStorage.setItem("mode", "light");
-    }
-}
-
-window.onload = function() {
-    let mode = localStorage.getItem("mode");
-    if (mode === "dark") {
-        document.getElementById("body").classList.remove("light-mode");
-        document.getElementById("body").classList.add("dark-mode");
-    }
-}
-</script>
+</div>
 
 </body>
 </html>
