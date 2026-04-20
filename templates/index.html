@@ -7,17 +7,16 @@
 
 <style>
 
-/* BACKGROUND */
 body {
-    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    background: linear-gradient(135deg, #141e30, #243b55);
     font-family: 'Segoe UI', sans-serif;
     color: white;
 }
 
-/* GLASS EFFECT */
+/* GLASS */
 .glass {
     background: rgba(255,255,255,0.08);
-    backdrop-filter: blur(12px);
+    backdrop-filter: blur(10px);
     border-radius: 15px;
     padding: 20px;
 }
@@ -32,43 +31,51 @@ body {
 /* BUTTONS */
 .btn-premium {
     border: none;
-    padding: 8px 16px;
     border-radius: 10px;
-    font-weight: 500;
+    padding: 8px 15px;
     transition: 0.3s;
 }
 
 .btn-premium:hover {
-    transform: translateY(-2px);
-    opacity: 0.9;
+    transform: translateY(-3px);
 }
 
-.btn-dashboard { background: #3a7bd5; color: white; }
-.btn-doctors { background: #00c6ff; color: white; }
-.btn-appointments { background: #00d2ff; color: white; }
-.btn-admin { background: #f7971e; color: white; }
-.btn-logout { background: #ff4b2b; color: white; }
+.btn-dashboard { background: #4facfe; }
+.btn-doctors { background: #00f2fe; }
+.btn-appointments { background: #43e97b; }
+.btn-admin { background: #f7971e; }
+.btn-logout { background: #ff416c; }
 
 /* CARD */
-.card-custom {
+.card-pro {
     background: white;
     color: black;
     border-radius: 15px;
     padding: 20px;
-    margin-bottom: 20px;
+    transition: 0.3s;
 }
 
-/* INPUT */
-input {
-    border-radius: 10px !important;
+.card-pro:hover {
+    transform: scale(1.02);
 }
 
-/* TABLE */
-.table {
-    background: white;
-    border-radius: 10px;
-    overflow: hidden;
+/* STATS */
+.stats {
+    display: flex;
+    gap: 15px;
 }
+
+.stat-box {
+    flex: 1;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    color: white;
+}
+
+.blue { background: #2193b0; }
+.green { background: #56ab2f; }
+.orange { background: #f7971e; }
 
 </style>
 
@@ -80,7 +87,6 @@ input {
 
 <!-- NAVBAR -->
 <div class="navbar-custom mb-4">
-
 <h3>🏥 Hospital System</h3>
 
 <div class="d-flex gap-2">
@@ -90,24 +96,41 @@ input {
 <a href="/admin" class="btn btn-premium btn-admin">Admin</a>
 <a href="/logout" class="btn btn-premium btn-logout">Logout</a>
 </div>
-
 </div>
 
 <!-- SEARCH -->
 <div class="glass mb-3">
 <form method="GET">
-<input name="search" placeholder="🔍 Search patient..." class="form-control">
+<input name="search" class="form-control" placeholder="🔍 Search patient...">
 </form>
 </div>
 
 <!-- STATS -->
-<div class="glass mb-3 text-center">
+<div class="stats mb-3">
+<div class="stat-box blue">
 <h5>Total Patients</h5>
-<h1>{{ total }}</h1>
+<h2>{{ total }}</h2>
 </div>
 
-<!-- ADD PATIENT -->
-<div class="card-custom">
+<div class="stat-box green">
+<h5>System Status</h5>
+<h2>Active</h2>
+</div>
+
+<div class="stat-box orange">
+<h5>Records</h5>
+<h2>{{ total }}</h2>
+</div>
+</div>
+
+<!-- CHART -->
+<div class="glass mb-3 text-center">
+<h5>Disease Analytics</h5>
+<img src="/static/chart.png" width="100%">
+</div>
+
+<!-- ADD -->
+<div class="card-pro mb-3">
 <h4>Add Patient</h4>
 
 <form action="/add" method="POST">
@@ -120,8 +143,7 @@ input {
 </div>
 
 <!-- TABLE -->
-<div class="card-custom">
-
+<div class="card-pro">
 <table class="table table-striped">
 <tr>
 <th>Name</th>
@@ -144,7 +166,6 @@ input {
 {% endfor %}
 
 </table>
-
 </div>
 
 </div>
