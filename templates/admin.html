@@ -8,12 +8,12 @@
 <style>
 
 body {
-    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    background: linear-gradient(135deg, #141e30, #243b55);
     color: white;
     font-family: 'Segoe UI', sans-serif;
 }
 
-/* GLASS */
+/* GLASS EFFECT */
 .glass {
     background: rgba(255,255,255,0.08);
     backdrop-filter: blur(10px);
@@ -24,31 +24,39 @@ body {
 /* STATS */
 .stats {
     display: flex;
-    gap: 15px;
+    gap: 20px;
 }
 
 .stat-box {
     flex: 1;
-    padding: 20px;
+    padding: 25px;
     border-radius: 15px;
     text-align: center;
     transition: 0.3s;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
 }
 
 .stat-box:hover {
-    transform: scale(1.05);
+    transform: translateY(-5px) scale(1.03);
 }
 
-.blue { background: #2193b0; }
-.green { background: #56ab2f; }
-.orange { background: #f7971e; }
+/* COLORS */
+.blue { background: linear-gradient(135deg, #36d1dc, #5b86e5); }
+.green { background: linear-gradient(135deg, #56ab2f, #a8e063); }
+.orange { background: linear-gradient(135deg, #f7971e, #ffd200); }
 
 /* BUTTON */
 .btn-back {
-    background: #ff416c;
+    background: linear-gradient(135deg, #ff416c, #ff4b2b);
     border: none;
-    padding: 10px 20px;
+    padding: 10px 25px;
     border-radius: 10px;
+    color: white;
+    font-weight: bold;
+}
+
+.btn-back:hover {
+    transform: scale(1.05);
 }
 
 </style>
@@ -57,12 +65,12 @@ body {
 
 <body>
 
-<div class="container mt-4">
+<div class="container mt-5">
 
-<h2 class="text-center mb-4">👑 Admin Dashboard</h2>
+<h2 class="text-center mb-5">👑 Admin Dashboard</h2>
 
 <!-- STATS -->
-<div class="stats mb-4">
+<div class="stats mb-5">
 
 <div class="stat-box blue">
 <h5>Total Patients</h5>
@@ -81,10 +89,10 @@ body {
 
 </div>
 
-<!-- CHART -->
+<!-- MESSAGE -->
 <div class="glass text-center mb-4">
-<h5>Disease Analytics</h5>
-<img src="/static/chart.png" width="100%">
+<h5>🚀 System Running Smoothly</h5>
+<p>All modules are working fine. You can manage hospital data from dashboard.</p>
 </div>
 
 <!-- BACK -->
