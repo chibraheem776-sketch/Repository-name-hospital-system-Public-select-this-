@@ -1,168 +1,118 @@
-from flask import Flask, render_template, request, redirect, session, send_file
+from flask import Flask, render_template, request, redirect, session
 import sqlite3
-import os
-import matplotlib
-matplotlib.use('Agg')
-import matplotlib.pyplot as plt
-from fpdf import FPDF
 
 app = Flask(__name__)
 app.secret_key = "secret123"
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-db_path = os.path.join(BASE_DIR, "hospital.db")
-
+# DATABASE CONNECT
 def get_db():
-    return sqlite3.connect(db_path)
+    conn = sqlite3.connect("hospital.db")
+    conn.row_factory = sqlite3.Row
+    return conn
 
-def create_tables():
+# ================= HOME =================
+@app.route('/')
+def home():
+    if "user" not in session:
+        return redirect("/login")
+
     conn = get_db()
-    c = conn.cursor()
-
-    c.execute("""
-    CREATE TABLE IF NOT EXISTS patients (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT,
-        age TEXT,
-        disease TEXT
-    )
-    """)
-
-    conn.commit()
+    patients = conn.execute("SELECT * FROM patients").fetchall()
     conn.close()
 
-create_tables()
+    return render_template("index.html", patients=patients, total=len(patients))
 
-@app.route("/", methods=["GET", "POST"])
+
+# ================= LOGIN =================
+@app.route('/login', methods=["GET", "POST"])
 def login():
     if request.method == "POST":
-        if request.form["username"] == "admin" and request.form["password"] == "1234":
-            session["user"] = "admin"
-            return redirect("/dashboard")
+        session["user"] = request.form["username"]
+        return redirect("/")
     return render_template("login.html")
 
-@app.route("/dashboard")
-def dashboard():
-    if "user" not in session:
-        return redirect("/")
 
-    conn = get_db()
-    c = conn.cursor()
-
-    search = request.args.get("search")
-
-    if search:
-        c.execute("SELECT * FROM patients WHERE name LIKE ?", ('%' + search + '%',))
-    else:
-        c.execute("SELECT * FROM patients")
-
-    patients = c.fetchall()
-
-    c.execute("SELECT COUNT(*) FROM patients")
-    total = c.fetchone()[0]
-
-    diseases = {}
-    for p in patients:
-        diseases[p[3]] = diseases.get(p[3], 0) + 1
-
-    if diseases:
-        plt.clf()
-        plt.bar(diseases.keys(), diseases.values())
-
-        chart_path = os.path.join(BASE_DIR, "static", "chart.png")
-        plt.savefig(chart_path)
-        plt.close()
-
-    conn.close()
-
-    return render_template("index.html", patients=patients, total=total)
-
-@app.route("/add", methods=["POST"])
-def add():
-    conn = get_db()
-    c = conn.cursor()
-
-    c.execute("INSERT INTO patients (name, age, disease) VALUES (?, ?, ?)",
-              (request.form["name"], request.form["age"], request.form["disease"]))
-
-    conn.commit()
-    conn.close()
-
-    return redirect("/dashboard")
-
-@app.route("/view/<int:id>")
-def view(id):
-    conn = get_db()
-    c = conn.cursor()
-
-    c.execute("SELECT * FROM patients WHERE id=?", (id,))
-    patient = c.fetchone()
-
-    conn.close()
-
-    return render_template("view.html", p=patient)
-
-@app.route("/edit/<int:id>", methods=["GET", "POST"])
-def edit(id):
-    conn = get_db()
-    c = conn.cursor()
-
-    if request.method == "POST":
-        c.execute("""
-        UPDATE patients
-        SET name=?, age=?, disease=?
-        WHERE id=?
-        """, (
-            request.form["name"],
-            request.form["age"],
-            request.form["disease"],
-            id
-        ))
-        conn.commit()
-        conn.close()
-        return redirect("/dashboard")
-
-    c.execute("SELECT * FROM patients WHERE id=?", (id,))
-    patient = c.fetchone()
-
-    conn.close()
-
-    return render_template("edit.html", p=patient)
-
-@app.route("/delete/<int:id>")
-def delete(id):
-    conn = get_db()
-    c = conn.cursor()
-
-    c.execute("DELETE FROM patients WHERE id=?", (id,))
-    conn.commit()
-    conn.close()
-
-    return redirect("/dashboard")
-
-@app.route("/report")
-def report():
-    conn = get_db()
-    c = conn.cursor()
-    c.execute("SELECT * FROM patients")
-    data = c.fetchall()
-
-    pdf = FPDF()
-    pdf.add_page()
-    pdf.set_font("Arial", size=12)
-
-    for p in data:
-        pdf.cell(200, 10, txt=f"{p[1]} | {p[2]} | {p[3]}", ln=True)
-
-    file_path = os.path.join(BASE_DIR, "report.pdf")
-    pdf.output(file_path)
-
-    return send_file(file_path, as_attachment=True)
-
-@app.route("/logout")
+# ================= LOGOUT =================
+@app.route('/logout')
 def logout():
     session.pop("user", None)
+    return redirect("/login")
+
+
+# ================= ADD PATIENT =================
+@app.route('/add', methods=["POST"])
+def add():
+    name = request.form["name"]
+    age = request.form["age"]
+    disease = request.form["disease"]
+
+    conn = get_db()
+    conn.execute("INSERT INTO patients (name, age, disease) VALUES (?, ?, ?)",
+                 (name, age, disease))
+    conn.commit()
+    conn.close()
+
     return redirect("/")
 
+
+# ================= DELETE =================
+@app.route('/delete/<int:id>')
+def delete(id):
+    conn = get_db()
+    conn.execute("DELETE FROM patients WHERE id=?", (id,))
+    conn.commit()
+    conn.close()
+    return redirect("/")
+
+
+# ================= EDIT =================
+@app.route('/edit/<int:id>', methods=["GET", "POST"])
+def edit(id):
+    conn = get_db()
+
+    if request.method == "POST":
+        name = request.form["name"]
+        age = request.form["age"]
+        disease = request.form["disease"]
+
+        conn.execute("UPDATE patients SET name=?, age=?, disease=? WHERE id=?",
+                     (name, age, disease, id))
+        conn.commit()
+        conn.close()
+        return redirect("/")
+
+    patient = conn.execute("SELECT * FROM patients WHERE id=?", (id,)).fetchone()
+    conn.close()
+    return render_template("edit.html", patient=patient)
+
+
+# ================= VIEW =================
+@app.route('/view/<int:id>')
+def view(id):
+    conn = get_db()
+    patient = conn.execute("SELECT * FROM patients WHERE id=?", (id,)).fetchone()
+    conn.close()
+    return render_template("view.html", patient=patient)
+
+
+# ================= DOCTORS =================
+@app.route('/doctors')
+def doctors():
+    return render_template("doctors.html")
+
+
+# ================= APPOINTMENTS =================
+@app.route('/appointments')
+def appointments():
+    return render_template("appointments.html")
+
+
+# ================= ADMIN =================
+@app.route('/admin')
+def admin():
+    return render_template("admin.html")
+
+
+# ================= RUN =================
 if __name__ == "__main__":
     app.run(debug=True)
