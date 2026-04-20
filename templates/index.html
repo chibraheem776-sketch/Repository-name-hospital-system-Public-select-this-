@@ -43,7 +43,13 @@ body {
     transition: 0.3s;
 }
 
-/* toggle button */
+/* NAVBAR */
+.navbar-custom {
+    background: rgba(0,0,0,0.2);
+    padding: 10px;
+    border-radius: 10px;
+}
+
 .toggle-btn {
     cursor: pointer;
 }
@@ -56,22 +62,30 @@ body {
 
 <div class="container mt-4">
 
-<div class="d-flex justify-content-between align-items-center">
+<!-- HEADER + NAVBAR -->
+<div class="d-flex justify-content-between align-items-center mb-3">
 
-<h2 class="text-center mb-3">Hospital Management System</h2>
+<h2>🏥 Hospital Management System</h2>
 
-<div>
+<div class="d-flex gap-2">
+
+<a href="/dashboard" class="btn btn-primary">Dashboard</a>
+<a href="/doctors" class="btn btn-info">Doctors</a>
+<a href="/appointments" class="btn btn-success">Appointments</a>
+<a href="/admin" class="btn btn-warning">Admin</a>
+
 <button onclick="toggleMode()" class="btn btn-secondary toggle-btn">
-🌙 Toggle Mode
+🌙
 </button>
-<a href="/logout" class="btn btn-danger">Logout</a>
-</div>
 
+<a href="/logout" class="btn btn-danger">Logout</a>
+
+</div>
 </div>
 
 <!-- SEARCH -->
 <form method="GET" class="mb-3">
-<input name="search" placeholder="Search patient..." class="form-control">
+<input name="search" placeholder="🔍 Search patient..." class="form-control">
 </form>
 
 <!-- STATS -->
@@ -84,9 +98,9 @@ body {
 <div class="card p-3 mb-3">
 <h4>Add Patient</h4>
 <form action="/add" method="POST">
-<input name="name" class="form-control mb-2" placeholder="Name">
-<input name="age" class="form-control mb-2" placeholder="Age">
-<input name="disease" class="form-control mb-2" placeholder="Disease">
+<input name="name" class="form-control mb-2" placeholder="Name" required>
+<input name="age" class="form-control mb-2" placeholder="Age" required>
+<input name="disease" class="form-control mb-2" placeholder="Disease" required>
 <button class="btn btn-primary w-100">Add Patient</button>
 </form>
 </div>
@@ -135,7 +149,6 @@ function toggleMode() {
     }
 }
 
-// load saved mode
 window.onload = function() {
     let mode = localStorage.getItem("mode");
     if (mode === "dark") {
@@ -146,8 +159,4 @@ window.onload = function() {
 </script>
 
 </body>
-<<<<<<< HEAD
 </html>
-=======
-</html>
->>>>>>> e720558b417703ce19a3714b049a1af65ef2da8f
