@@ -8,131 +8,91 @@
 <style>
 
 body {
-    transition: 0.4s;
-}
-
-/* LIGHT MODE */
-.light-mode {
-    background: linear-gradient(120deg, #84fab0, #8fd3f4);
-    color: black;
-}
-
-/* DARK MODE */
-.dark-mode {
-    background: #121212;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
     color: white;
+    font-family: 'Segoe UI', sans-serif;
 }
 
-.dark-mode .card {
-    background: #1e1e1e;
-    color: white;
-}
-
-.card {
+/* GLASS */
+.glass {
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(10px);
     border-radius: 15px;
     padding: 20px;
-    animation: fadeIn 0.6s ease-in-out;
+}
+
+/* STATS */
+.stats {
+    display: flex;
+    gap: 15px;
+}
+
+.stat-box {
+    flex: 1;
+    padding: 20px;
+    border-radius: 15px;
     text-align: center;
+    transition: 0.3s;
 }
 
-@keyframes fadeIn {
-    from {opacity: 0; transform: translateY(20px);}
-    to {opacity: 1;}
-}
-
-.card h2 {
-    font-size: 40px;
-    font-weight: bold;
-}
-
-.btn:hover {
+.stat-box:hover {
     transform: scale(1.05);
+}
+
+.blue { background: #2193b0; }
+.green { background: #56ab2f; }
+.orange { background: #f7971e; }
+
+/* BUTTON */
+.btn-back {
+    background: #ff416c;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
 }
 
 </style>
 
 </head>
 
-<body class="light-mode" id="body">
+<body>
 
 <div class="container mt-4">
 
-<!-- NAVBAR -->
-<div class="d-flex justify-content-between align-items-center mb-4">
+<h2 class="text-center mb-4">👑 Admin Dashboard</h2>
 
-<h2>⚙️ Admin Dashboard</h2>
+<!-- STATS -->
+<div class="stats mb-4">
 
-<div class="d-flex gap-2">
-<a href="/dashboard" class="btn btn-primary">Dashboard</a>
-<a href="/doctors" class="btn btn-info">Doctors</a>
-<a href="/appointments" class="btn btn-success">Appointments</a>
-<a href="/admin" class="btn btn-warning">Admin</a>
-
-<button onclick="toggleMode()" class="btn btn-secondary">🌙</button>
-
-<a href="/logout" class="btn btn-danger">Logout</a>
-</div>
-
-</div>
-
-<!-- STATS CARDS -->
-<div class="row text-center">
-
-<div class="col-md-4 mb-3">
-<div class="card bg-primary text-white">
+<div class="stat-box blue">
 <h5>Total Patients</h5>
 <h2>{{ patients }}</h2>
 </div>
-</div>
 
-<div class="col-md-4 mb-3">
-<div class="card bg-warning text-dark">
-<h5>Total Doctors</h5>
-<h2>{{ doctors }}</h2>
-</div>
-</div>
-
-<div class="col-md-4 mb-3">
-<div class="card bg-success text-white">
+<div class="stat-box green">
 <h5>Total Appointments</h5>
 <h2>{{ appointments }}</h2>
 </div>
+
+<div class="stat-box orange">
+<h5>Total Doctors</h5>
+<h2>{{ doctors }}</h2>
 </div>
 
 </div>
 
-<!-- EXTRA SECTION -->
-<div class="card mt-4">
-<h4>System Overview</h4>
-<p>This admin panel helps you monitor patients, doctors, and appointments efficiently.</p>
+<!-- CHART -->
+<div class="glass text-center mb-4">
+<h5>Disease Analytics</h5>
+<img src="/static/chart.png" width="100%">
+</div>
+
+<!-- BACK -->
+<div class="text-center">
+<a href="/dashboard" class="btn btn-back">⬅ Back to Dashboard</a>
 </div>
 
 </div>
-
-<!-- JS -->
-<script>
-function toggleMode() {
-    let body = document.getElementById("body");
-
-    if (body.classList.contains("light-mode")) {
-        body.classList.remove("light-mode");
-        body.classList.add("dark-mode");
-        localStorage.setItem("mode", "dark");
-    } else {
-        body.classList.remove("dark-mode");
-        body.classList.add("light-mode");
-        localStorage.setItem("mode", "light");
-    }
-}
-
-window.onload = function() {
-    let mode = localStorage.getItem("mode");
-    if (mode === "dark") {
-        document.getElementById("body").classList.remove("light-mode");
-        document.getElementById("body").classList.add("dark-mode");
-    }
-}
-</script>
 
 </body>
 </html>
