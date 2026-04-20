@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Dashboard</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+
+body {
+    transition: 0.4s;
+}
+
+/* LIGHT MODE */
+.light-mode {
+    background: linear-gradient(120deg, #84fab0, #8fd3f4);
+    color: black;
+}
+
+/* DARK MODE */
+.dark-mode {
+    background: #121212;
+    color: white;
+}
+
+.dark-mode .card {
+    background: #1e1e1e;
+    color: white;
+}
+
+.card {
+    border-radius: 15px;
+    animation: fadeIn 0.8s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {opacity: 0; transform: translateY(20px);}
+    to {opacity: 1;}
+}
+
+.btn:hover {
+    transform: scale(1.05);
+    transition: 0.3s;
+}
+
+/* toggle button */
+.toggle-btn {
+    cursor: pointer;
+}
+
+</style>
+
+</head>
+
+<body class="light-mode" id="body">
+
+<div class="container mt-4">
+
+<div class="d-flex justify-content-between align-items-center">
+
+<h2 class="text-center mb-3">Hospital Management System</h2>
+
+<div>
+<button onclick="toggleMode()" class="btn btn-secondary toggle-btn">
+🌙 Toggle Mode
+</button>
+<a href="/logout" class="btn btn-danger">Logout</a>
+</div>
+
+</div>
+
+<!-- SEARCH -->
+<form method="GET" class="mb-3">
+<input name="search" placeholder="Search patient..." class="form-control">
+</form>
+
+<!-- STATS -->
+<div class="card p-3 mb-3 bg-primary text-white">
+<h5>Total Patients</h5>
+<h2>{{ total }}</h2>
+</div>
+
+<!-- ADD -->
+<div class="card p-3 mb-3">
+<h4>Add Patient</h4>
+<form action="/add" method="POST">
+<input name="name" class="form-control mb-2" placeholder="Name">
+<input name="age" class="form-control mb-2" placeholder="Age">
+<input name="disease" class="form-control mb-2" placeholder="Disease">
+<button class="btn btn-primary w-100">Add Patient</button>
+</form>
+</div>
+
+<!-- TABLE -->
+<div class="card p-3">
+<table class="table table-striped">
+<tr>
+<th>Name</th>
+<th>Age</th>
+<th>Disease</th>
+<th>Action</th>
+</tr>
+
+{% for p in patients %}
+<tr>
+<td>{{ p[1] }}</td>
+<td>{{ p[2] }}</td>
+<td>{{ p[3] }}</td>
+<td>
+<a href="/view/{{ p[0] }}" class="btn btn-info btn-sm">View</a>
+<a href="/edit/{{ p[0] }}" class="btn btn-warning btn-sm">Edit</a>
+<a href="/delete/{{ p[0] }}" class="btn btn-danger btn-sm">Delete</a>
+</td>
+</tr>
+{% endfor %}
+
+</table>
+</div>
+
+</div>
+
+<!-- JS -->
+<script>
+function toggleMode() {
+    let body = document.getElementById("body");
+
+    if (body.classList.contains("light-mode")) {
+        body.classList.remove("light-mode");
+        body.classList.add("dark-mode");
+        localStorage.setItem("mode", "dark");
+    } else {
+        body.classList.remove("dark-mode");
+        body.classList.add("light-mode");
+        localStorage.setItem("mode", "light");
+    }
+}
+
+// load saved mode
+window.onload = function() {
+    let mode = localStorage.getItem("mode");
+    if (mode === "dark") {
+        document.getElementById("body").classList.remove("light-mode");
+        document.getElementById("body").classList.add("dark-mode");
+    }
+}
+</script>
+
+</body>
+</html>
