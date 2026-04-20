@@ -1,9 +1,10 @@
 from flask import Flask, render_template, request, redirect, session, send_file
 import sqlite3
 import os
-import matplotlib
-matplotlib.use('Agg')
-import matplotlib.pyplot as plt
+# ❌ matplotlib removed (chart removed safely)
+# import matplotlib
+# matplotlib.use('Agg')
+# import matplotlib.pyplot as plt
 from fpdf import FPDF
 
 app = Flask(__name__)
@@ -156,12 +157,12 @@ def appointments():
     conn.close()
     return render_template("appointments.html", data=data)
 
-# DOCTORS (simple page)
+# DOCTORS
 @app.route("/doctors")
 def doctors():
     return render_template("doctors.html")
 
-# ADMIN PANEL
+# ADMIN
 @app.route("/admin")
 def admin():
     conn = get_db()
@@ -173,7 +174,7 @@ def admin():
     c.execute("SELECT COUNT(*) FROM appointments")
     total_appointments = c.fetchone()[0]
 
-    doctors = 5  # static for now
+    doctors = 5
 
     conn.close()
 

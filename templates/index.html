@@ -8,142 +8,98 @@
 <style>
 
 body {
-    background: linear-gradient(135deg, #141e30, #243b55);
-    font-family: 'Segoe UI', sans-serif;
+    transition: 0.4s;
+}
+
+/* LIGHT */
+.light-mode {
+    background: linear-gradient(120deg, #84fab0, #8fd3f4);
+}
+
+/* DARK */
+.dark-mode {
+    background: #121212;
     color: white;
 }
 
-/* GLASS */
-.glass {
-    background: rgba(255,255,255,0.08);
-    backdrop-filter: blur(10px);
+.dark-mode .card {
+    background: #1e1e1e;
+    color: white;
+}
+
+/* CARD */
+.card {
     border-radius: 15px;
-    padding: 20px;
+    transition: 0.3s;
 }
 
-/* NAVBAR */
-.navbar-custom {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.card:hover {
+    transform: translateY(-3px);
 }
 
-/* BUTTONS */
+/* PREMIUM BUTTON */
 .btn-premium {
-    border: none;
     border-radius: 10px;
-    padding: 8px 15px;
+    font-weight: 500;
     transition: 0.3s;
 }
 
 .btn-premium:hover {
-    transform: translateY(-3px);
+    transform: scale(1.05);
 }
-
-.btn-dashboard { background: #4facfe; }
-.btn-doctors { background: #00f2fe; }
-.btn-appointments { background: #43e97b; }
-.btn-admin { background: #f7971e; }
-.btn-logout { background: #ff416c; }
-
-/* CARD */
-.card-pro {
-    background: white;
-    color: black;
-    border-radius: 15px;
-    padding: 20px;
-    transition: 0.3s;
-}
-
-.card-pro:hover {
-    transform: scale(1.02);
-}
-
-/* STATS */
-.stats {
-    display: flex;
-    gap: 15px;
-}
-
-.stat-box {
-    flex: 1;
-    padding: 20px;
-    border-radius: 12px;
-    text-align: center;
-    color: white;
-}
-
-.blue { background: #2193b0; }
-.green { background: #56ab2f; }
-.orange { background: #f7971e; }
 
 </style>
-
 </head>
 
-<body>
+<body class="light-mode" id="body">
 
 <div class="container mt-4">
 
 <!-- NAVBAR -->
-<div class="navbar-custom mb-4">
+<div class="d-flex justify-content-between align-items-center mb-3">
+
 <h3>🏥 Hospital System</h3>
 
 <div class="d-flex gap-2">
-<a href="/dashboard" class="btn btn-premium btn-dashboard">Dashboard</a>
-<a href="/doctors" class="btn btn-premium btn-doctors">Doctors</a>
-<a href="/appointments" class="btn btn-premium btn-appointments">Appointments</a>
-<a href="/admin" class="btn btn-premium btn-admin">Admin</a>
-<a href="/logout" class="btn btn-premium btn-logout">Logout</a>
+
+<a href="/dashboard" class="btn btn-primary btn-premium">Dashboard</a>
+<a href="/doctors" class="btn btn-info btn-premium">Doctors</a>
+<a href="/appointments" class="btn btn-success btn-premium">Appointments</a>
+<a href="/admin" class="btn btn-warning btn-premium">Admin</a>
+
+<button onclick="toggleMode()" class="btn btn-dark btn-premium">
+🌙
+</button>
+
+<a href="/logout" class="btn btn-danger btn-premium">Logout</a>
+
 </div>
 </div>
 
 <!-- SEARCH -->
-<div class="glass mb-3">
-<form method="GET">
+<form method="GET" class="mb-3">
 <input name="search" class="form-control" placeholder="🔍 Search patient...">
 </form>
-</div>
 
 <!-- STATS -->
-<div class="stats mb-3">
-<div class="stat-box blue">
+<div class="card p-3 mb-3 bg-primary text-white">
 <h5>Total Patients</h5>
 <h2>{{ total }}</h2>
 </div>
 
-<div class="stat-box green">
-<h5>System Status</h5>
-<h2>Active</h2>
-</div>
-
-<div class="stat-box orange">
-<h5>Records</h5>
-<h2>{{ total }}</h2>
-</div>
-</div>
-
-<!-- CHART -->
-<div class="glass mb-3 text-center">
-<h5>Disease Analytics</h5>
-<img src="/static/chart.png" width="100%">
-</div>
-
 <!-- ADD -->
-<div class="card-pro mb-3">
+<div class="card p-3 mb-3">
 <h4>Add Patient</h4>
-
 <form action="/add" method="POST">
 <input name="name" class="form-control mb-2" placeholder="Name" required>
 <input name="age" class="form-control mb-2" placeholder="Age" required>
 <input name="disease" class="form-control mb-2" placeholder="Disease" required>
-
 <button class="btn btn-primary w-100">Add Patient</button>
 </form>
 </div>
 
 <!-- TABLE -->
-<div class="card-pro">
+<div class="card p-3">
 <table class="table table-striped">
 <tr>
 <th>Name</th>
@@ -164,11 +120,35 @@ body {
 </td>
 </tr>
 {% endfor %}
-
 </table>
 </div>
 
 </div>
+
+<!-- JS -->
+<script>
+function toggleMode() {
+    let body = document.getElementById("body");
+
+    if (body.classList.contains("light-mode")) {
+        body.classList.remove("light-mode");
+        body.classList.add("dark-mode");
+        localStorage.setItem("mode", "dark");
+    } else {
+        body.classList.remove("dark-mode");
+        body.classList.add("light-mode");
+        localStorage.setItem("mode", "light");
+    }
+}
+
+window.onload = function() {
+    let mode = localStorage.getItem("mode");
+    if (mode === "dark") {
+        document.getElementById("body").classList.remove("light-mode");
+        document.getElementById("body").classList.add("dark-mode");
+    }
+}
+</script>
 
 </body>
 </html>
