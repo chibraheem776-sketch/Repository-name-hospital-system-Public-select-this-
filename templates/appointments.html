@@ -1,26 +1,136 @@
 <!DOCTYPE html>
 <html>
 <head>
+<title>Appointments</title>
+
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+
+body {
+    transition: 0.4s;
+}
+
+/* LIGHT */
+.light-mode {
+    background: linear-gradient(120deg, #84fab0, #8fd3f4);
+    color: black;
+}
+
+/* DARK */
+.dark-mode {
+    background: #121212;
+    color: white;
+}
+
+.dark-mode .card {
+    background: #1e1e1e;
+    color: white;
+}
+
+.card {
+    border-radius: 15px;
+    animation: fadeIn 0.6s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {opacity: 0; transform: translateY(20px);}
+    to {opacity: 1;}
+}
+
+.btn:hover {
+    transform: scale(1.05);
+}
+
+</style>
+
 </head>
-<body class="bg-light">
+
+<body class="light-mode" id="body">
 
 <div class="container mt-4">
-<h2>Appointments</h2>
 
-<form method="POST">
-<input name="patient" placeholder="Patient Name" class="form-control mb-2">
-<input name="doctor" placeholder="Doctor Name" class="form-control mb-2">
-<input name="date" type="date" class="form-control mb-2">
-<button class="btn btn-success">Book</button>
-</form>
+<!-- NAVBAR -->
+<div class="d-flex justify-content-between align-items-center mb-3">
 
-<hr>
+<h2>📅 Appointments</h2>
 
-{% for a in data %}
-<p>{{ a[1] }} → {{ a[2] }} on {{ a[3] }}</p>
-{% endfor %}
+<div class="d-flex gap-2">
+<a href="/dashboard" class="btn btn-primary">Dashboard</a>
+<a href="/doctors" class="btn btn-info">Doctors</a>
+<a href="/appointments" class="btn btn-success">Appointments</a>
+<a href="/admin" class="btn btn-warning">Admin</a>
+
+<button onclick="toggleMode()" class="btn btn-secondary">🌙</button>
+
+<a href="/logout" class="btn btn-danger">Logout</a>
+</div>
 
 </div>
+
+<!-- FORM -->
+<div class="card p-3 mb-3">
+<h4>Book Appointment</h4>
+
+<form method="POST">
+<input name="patient" placeholder="Patient Name" class="form-control mb-2" required>
+<input name="doctor" placeholder="Doctor Name" class="form-control mb-2" required>
+<input name="date" type="date" class="form-control mb-2" required>
+<button class="btn btn-success w-100">Book Appointment</button>
+</form>
+
+</div>
+
+<!-- LIST -->
+<div class="card p-3">
+
+<h4>Appointments List</h4>
+
+<table class="table table-striped">
+<tr>
+<th>Patient</th>
+<th>Doctor</th>
+<th>Date</th>
+</tr>
+
+{% for a in data %}
+<tr>
+<td>{{ a[1] }}</td>
+<td>{{ a[2] }}</td>
+<td>{{ a[3] }}</td>
+</tr>
+{% endfor %}
+
+</table>
+
+</div>
+
+</div>
+
+<!-- JS -->
+<script>
+function toggleMode() {
+    let body = document.getElementById("body");
+
+    if (body.classList.contains("light-mode")) {
+        body.classList.remove("light-mode");
+        body.classList.add("dark-mode");
+        localStorage.setItem("mode", "dark");
+    } else {
+        body.classList.remove("dark-mode");
+        body.classList.add("light-mode");
+        localStorage.setItem("mode", "light");
+    }
+}
+
+window.onload = function() {
+    let mode = localStorage.getItem("mode");
+    if (mode === "dark") {
+        document.getElementById("body").classList.remove("light-mode");
+        document.getElementById("body").classList.add("dark-mode");
+    }
+}
+</script>
+
 </body>
 </html>
