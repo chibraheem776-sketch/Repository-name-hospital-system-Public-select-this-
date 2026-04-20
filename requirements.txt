@@ -1,4 +1,10 @@
+<<<<<<< HEAD
 flask
 matplotlib
 fpdf
+=======
+flask
+matplotlib
+fpdf
+>>>>>>> e720558b417703ce19a3714b049a1af65ef2da8f
 gunicorn
