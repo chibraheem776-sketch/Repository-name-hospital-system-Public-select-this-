@@ -6,99 +6,66 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"/>
 
 <style>
 
 body {
     margin: 0;
-    padding: 0;
-    overflow: hidden;
     font-family: 'Segoe UI', sans-serif;
+    background: #f5f7fa;
 }
 
-/* FULL SCREEN SLIDES */
-.slide {
+/* SLIDER FULL SCREEN */
+.swiper {
     width: 100%;
     height: 100vh;
-    display: none;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    color: white;
-    flex-direction: column;
+}
+
+/* CARD STYLE */
+.slide-card {
+    width: 90%;
+    max-width: 350px;
+    background: white;
+    border-radius: 20px;
     padding: 20px;
-    animation: fadeIn 0.6s ease;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
 
-/* ACTIVE */
-.active {
-    display: flex;
+/* IMAGE */
+.slide-card img {
+    width: 100%;
+    border-radius: 15px;
+    margin-bottom: 15px;
 }
 
-/* PREMIUM GRADIENTS */
-.slide1 {
-    background: linear-gradient(135deg, #667eea, #764ba2);
-}
-
-.slide2 {
-    background: linear-gradient(135deg, #00c6ff, #0072ff);
-}
-
-.slide3 {
-    background: linear-gradient(135deg, #11998e, #38ef7d);
-}
-
-/* TEXT */
-h1 {
-    font-size: 32px;
+/* TITLE */
+.slide-card h4 {
     font-weight: bold;
 }
 
-p {
-    font-size: 16px;
-    opacity: 0.9;
+/* TEXT */
+.slide-card p {
+    font-size: 14px;
+    color: #666;
 }
 
 /* BUTTON */
-.btn-custom {
-    margin-top: 20px;
-    padding: 10px 25px;
-    border-radius: 25px;
+.btn-next {
+    background: #4facfe;
     border: none;
-    background: white;
-    color: black;
-    font-weight: 600;
-    transition: 0.3s;
+    color: white;
+    border-radius: 20px;
+    padding: 8px 20px;
+    margin-top: 10px;
 }
 
-.btn-custom:hover {
-    transform: scale(1.05);
-}
-
-/* DOTS */
-.dots {
-    position: absolute;
-    bottom: 20px;
+/* CENTER */
+.swiper-slide {
     display: flex;
-    gap: 8px;
-}
-
-.dot {
-    width: 10px;
-    height: 10px;
-    background: white;
-    opacity: 0.4;
-    border-radius: 50%;
-}
-
-.dot.active {
-    opacity: 1;
-}
-
-/* ANIMATION */
-@keyframes fadeIn {
-    from {opacity: 0; transform: translateY(20px);}
-    to {opacity: 1;}
+    justify-content: center;
+    align-items: center;
 }
 
 </style>
@@ -106,50 +73,52 @@ p {
 
 <body>
 
-<!-- SLIDE 1 -->
-<div class="slide slide1 active">
-    <h1>🏥 Welcome</h1>
-    <p>Hospital Management System</p>
-    <button class="btn-custom" onclick="nextSlide()">Next</button>
+<div class="swiper">
+    <div class="swiper-wrapper">
+
+        <!-- SLIDE 1 -->
+        <div class="swiper-slide">
+            <div class="slide-card">
+                <img src="https://cdn-icons-png.flaticon.com/512/2785/2785819.png">
+                <h4>Welcome</h4>
+                <p>Hospital Management System</p>
+            </div>
+        </div>
+
+        <!-- SLIDE 2 -->
+        <div class="swiper-slide">
+            <div class="slide-card">
+                <img src="https://cdn-icons-png.flaticon.com/512/3774/3774299.png">
+                <h4>Appointments</h4>
+                <p>Book & manage appointments easily</p>
+            </div>
+        </div>
+
+        <!-- SLIDE 3 -->
+        <div class="swiper-slide">
+            <div class="slide-card">
+                <img src="https://cdn-icons-png.flaticon.com/512/3774/3774341.png">
+                <h4>Doctors</h4>
+                <p>View doctors & manage records</p>
+
+                <a href="/login" class="btn btn-next">Start</a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- DOTS -->
+    <div class="swiper-pagination"></div>
 </div>
 
-<!-- SLIDE 2 -->
-<div class="slide slide2">
-    <h1>💊 Our Services</h1>
-    <p>Patient Management, Doctors & Appointments</p>
-    <button class="btn-custom" onclick="nextSlide()">Next</button>
-</div>
-
-<!-- SLIDE 3 -->
-<div class="slide slide3">
-    <h1>🚀 Get Started</h1>
-    <p>Manage your hospital efficiently</p>
-    <a href="/login" class="btn-custom">Start Now</a>
-</div>
-
-<!-- DOTS -->
-<div class="dots" style="left:50%; transform:translateX(-50%);">
-    <div class="dot active"></div>
-    <div class="dot"></div>
-    <div class="dot"></div>
-</div>
+<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
 
 <script>
-
-let current = 0;
-const slides = document.querySelectorAll(".slide");
-const dots = document.querySelectorAll(".dot");
-
-function nextSlide() {
-    slides[current].classList.remove("active");
-    dots[current].classList.remove("active");
-
-    current++;
-
-    slides[current].classList.add("active");
-    dots[current].classList.add("active");
-}
-
+new Swiper('.swiper', {
+    pagination: {
+        el: '.swiper-pagination',
+    },
+});
 </script>
 
 </body>
