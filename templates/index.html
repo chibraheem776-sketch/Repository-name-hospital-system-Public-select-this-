@@ -9,9 +9,15 @@
 <style>
 
 body {
-    font-family:Segoe UI;
+    font-family: Segoe UI;
     background: linear-gradient(135deg,#0f2027,#2c5364);
     color:white;
+    transition:0.4s;
+}
+
+/* DARK MODE */
+.dark-mode {
+    background:#121212;
 }
 
 /* NAV */
@@ -21,32 +27,6 @@ body {
     align-items:center;
     margin-bottom:20px;
 }
-
-/* CARDS */
-<div class="row mb-3">
-
-<div class="col-md-4">
-<div class="card p-3 bg-primary text-white">
-<h5>Patients</h5>
-<h2>{{ total }}</h2>
-</div>
-</div>
-
-<div class="col-md-4">
-<div class="card p-3 bg-success text-white">
-<h5>Appointments</h5>
-<h2>{{ appointments }}</h2>
-</div>
-</div>
-
-<div class="col-md-4">
-<div class="card p-3 bg-warning text-white">
-<h5>Doctors</h5>
-<h2>{{ doctors }}</h2>
-</div>
-</div>
-
-</div>
 
 /* STATS */
 .stats {
@@ -66,6 +46,14 @@ body {
 .green { background:#38ef7d; color:black;}
 .orange { background:#ff9966; }
 
+/* CARD BOX */
+.card-box {
+    background: rgba(255,255,255,0.1);
+    padding:15px;
+    border-radius:12px;
+    margin-top:15px;
+}
+
 /* TABLE */
 .table {
     color:white;
@@ -79,14 +67,16 @@ body {
 </style>
 </head>
 
-<body>
+<body id="body">
 
 <div class="container mt-3">
 
+<!-- HEADER -->
 <div class="top-bar">
 <h4>🏥 Dashboard</h4>
 
 <div>
+<button onclick="toggleMode()" class="btn btn-dark btn-sm">🌙</button>
 <a href="/logout" class="btn btn-danger btn-sm">Logout</a>
 </div>
 </div>
@@ -99,11 +89,11 @@ Patients<br>{{ total }}
 </div>
 
 <div class="stat green">
-Appointments<br>{{ appointments_count }}
+Appointments<br>{{ appointments }}
 </div>
 
 <div class="stat orange">
-Doctors<br>{{ doctors_count }}
+Doctors<br>{{ doctors }}
 </div>
 
 </div>
@@ -121,9 +111,9 @@ Doctors<br>{{ doctors_count }}
 <h5>Add Patient</h5>
 
 <form action="/add" method="POST">
-<input name="name" class="form-control mb-2" placeholder="Name">
-<input name="age" class="form-control mb-2" placeholder="Age">
-<input name="disease" class="form-control mb-2" placeholder="Disease">
+<input name="name" class="form-control mb-2" placeholder="Name" required>
+<input name="age" class="form-control mb-2" placeholder="Age" required>
+<input name="disease" class="form-control mb-2" placeholder="Disease" required>
 
 <button class="btn btn-primary w-100">Add</button>
 </form>
@@ -153,11 +143,34 @@ Doctors<br>{{ doctors_count }}
 </td>
 </tr>
 {% endfor %}
+
 </table>
 
 </div>
 
 </div>
+
+<!-- DARK MODE SCRIPT -->
+<script>
+function toggleMode() {
+    let body = document.getElementById("body");
+
+    if (body.classList.contains("dark-mode")) {
+        body.classList.remove("dark-mode");
+        localStorage.setItem("mode","light");
+    } else {
+        body.classList.add("dark-mode");
+        localStorage.setItem("mode","dark");
+    }
+}
+
+window.onload = function() {
+    let mode = localStorage.getItem("mode");
+    if(mode === "dark"){
+        document.getElementById("body").classList.add("dark-mode");
+    }
+}
+</script>
 
 </body>
 </html>
