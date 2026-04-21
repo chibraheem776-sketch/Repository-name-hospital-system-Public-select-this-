@@ -1,10 +1,6 @@
 from flask import Flask, render_template, request, redirect, session, send_file
 import sqlite3
 import os
-# ❌ matplotlib removed (chart removed safely)
-# import matplotlib
-# matplotlib.use('Agg')
-# import matplotlib.pyplot as plt
 from fpdf import FPDF
 
 app = Flask(__name__)
@@ -45,8 +41,13 @@ def create_tables():
 
 create_tables()
 
-# LOGIN
-@app.route("/", methods=["GET", "POST"])
+# 🔥 NEW: INTRO PAGE
+@app.route("/")
+def intro():
+    return render_template("intro.html")
+
+# 🔥 LOGIN (route changed)
+@app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
         if request.form["username"] == "admin" and request.form["password"] == "1234":
@@ -58,7 +59,7 @@ def login():
 @app.route("/dashboard")
 def dashboard():
     if "user" not in session:
-        return redirect("/")
+        return redirect("/login")
 
     conn = get_db()
     c = conn.cursor()
@@ -187,11 +188,7 @@ def admin():
 @app.route("/logout")
 def logout():
     session.pop("user", None)
-    return redirect("/")
+    return redirect("/login")
 
 if __name__ == "__main__":
     app.run(debug=True)
-    
-@app.route("/")
-def intro():
-    return render_template("intro.html")
