@@ -63,8 +63,9 @@ def dashboard():
 
     search = request.args.get("search")
 
-    if search:
-        c.execute("SELECT * FROM patients WHERE name LIKE ?", ('%' + search + '%',))
+    # 🔥 FIXED SEARCH LOGIC
+    if search and search.strip() != "":
+        c.execute("SELECT * FROM patients WHERE name LIKE ?", ('%' + search.strip() + '%',))
     else:
         c.execute("SELECT * FROM patients")
 
