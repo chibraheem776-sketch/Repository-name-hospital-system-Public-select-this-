@@ -2,138 +2,120 @@
 <html>
 <head>
 <title>Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <style>
 
 body {
-    transition: 0.4s;
+    font-family:Segoe UI;
+    background: linear-gradient(135deg,#0f2027,#2c5364);
+    color:white;
 }
 
-/* LIGHT */
-.light-mode {
-    background: linear-gradient(120deg, #84fab0, #8fd3f4);
+/* NAV */
+.top-bar {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
 }
 
-/* DARK */
-.dark-mode {
-    background: #121212;
-    color: white;
+/* CARDS */
+.card-box {
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(10px);
+    border-radius:15px;
+    padding:15px;
+    margin-bottom:15px;
 }
 
-.dark-mode .card {
-    background: #1e1e1e;
-    color: white;
+/* STATS */
+.stats {
+    display:grid;
+    grid-template-columns: repeat(auto-fit,minmax(140px,1fr));
+    gap:10px;
 }
 
-/* CARD */
-.card {
-    border-radius: 15px;
-    transition: 0.3s;
+.stat {
+    padding:15px;
+    border-radius:12px;
+    text-align:center;
+    font-weight:bold;
 }
 
-.card:hover {
-    transform: translateY(-3px);
+.blue { background:#2193b0; }
+.green { background:#38ef7d; color:black;}
+.orange { background:#ff9966; }
+
+/* TABLE */
+.table {
+    color:white;
 }
 
-/* PREMIUM BUTTON */
-.btn-premium {
-    border-radius: 10px;
-    font-weight: 500;
-    transition: 0.3s;
+/* BUTTON */
+.btn-custom {
+    border-radius:10px;
 }
-
-.btn-premium:hover {
-    transform: scale(1.05);
-}
-
-/* NEW STATS GRID */
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 15px;
-}
-
-.stat-card {
-    padding: 20px;
-    border-radius: 15px;
-    color: white;
-    text-align: center;
-    font-weight: 600;
-}
-
-/* COLORS */
-.bg-blue { background: linear-gradient(45deg, #2193b0, #6dd5ed); }
-.bg-green { background: linear-gradient(45deg, #11998e, #38ef7d); }
-.bg-orange { background: linear-gradient(45deg, #ff9966, #ff5e62); }
 
 </style>
 </head>
 
-<body class="light-mode" id="body">
+<body>
 
-<div class="container mt-4">
+<div class="container mt-3">
 
-<!-- NAVBAR -->
-<div class="d-flex justify-content-between align-items-center mb-3">
+<div class="top-bar">
+<h4>🏥 Dashboard</h4>
 
-<h3>🏥 Hospital System</h3>
-
-<div class="d-flex gap-2">
-
-<a href="/dashboard" class="btn btn-primary btn-premium">Dashboard</a>
-<a href="/doctors" class="btn btn-info btn-premium">Doctors</a>
-<a href="/appointments" class="btn btn-success btn-premium">Appointments</a>
-<a href="/admin" class="btn btn-warning btn-premium">Admin</a>
-
-<button onclick="toggleMode()" class="btn btn-dark btn-premium">
-🌙
-</button>
-
-<a href="/logout" class="btn btn-danger btn-premium">Logout</a>
-
+<div>
+<a href="/logout" class="btn btn-danger btn-sm">Logout</a>
 </div>
 </div>
 
-<!-- SEARCH -->
-<form method="GET" class="mb-3">
-<input name="search" class="form-control" placeholder="🔍 Search patient...">
-</form>
+<!-- STATS -->
+<div class="stats">
 
-<!-- 🔥 NEW QUICK STATS -->
-<div class="stats-grid mb-3">
-
-<div class="stat-card bg-blue">
-<h6>Total Patients</h6>
-<h2>{{ total }}</h2>
+<div class="stat blue">
+Patients<br>{{ total }}
 </div>
 
-<div class="stat-card bg-green">
-<h6>Total Appointments</h6>
-<h2>{{ appointments_count }}</h2>
+<div class="stat green">
+Appointments<br>{{ appointments_count }}
 </div>
 
-<div class="stat-card bg-orange">
-<h6>Total Doctors</h6>
-<h2>{{ doctors_count }}</h2>
+<div class="stat orange">
+Doctors<br>{{ doctors_count }}
 </div>
 
 </div>
 
-<!-- ADD -->
-<div class="card p-3 mb-3">
-<h4>Add Patient</h4>
+<!-- QUICK ACTION -->
+<div class="card-box">
+<h5>Quick Actions</h5>
+<a href="/appointments" class="btn btn-success btn-sm">Appointments</a>
+<a href="/doctors" class="btn btn-info btn-sm">Doctors</a>
+<a href="/admin" class="btn btn-warning btn-sm">Admin</a>
+</div>
+
+<!-- ADD PATIENT -->
+<div class="card-box">
+<h5>Add Patient</h5>
+
 <form action="/add" method="POST">
-<input name="name" class="form-control mb-2" placeholder="Name" required>
-<input name="age" class="form-control mb-2" placeholder="Age" required>
-<input name="disease" class="form-control mb-2" placeholder="Disease" required>
-<button class="btn btn-primary w-100">Add Patient</button>
+<input name="name" class="form-control mb-2" placeholder="Name">
+<input name="age" class="form-control mb-2" placeholder="Age">
+<input name="disease" class="form-control mb-2" placeholder="Disease">
+
+<button class="btn btn-primary w-100">Add</button>
 </form>
 </div>
 
 <!-- TABLE -->
-<div class="card p-3">
+<div class="card-box">
+<h5>Patients</h5>
+
 <table class="table table-striped">
 <tr>
 <th>Name</th>
@@ -155,34 +137,10 @@ body {
 </tr>
 {% endfor %}
 </table>
-</div>
 
 </div>
 
-<!-- JS -->
-<script>
-function toggleMode() {
-    let body = document.getElementById("body");
-
-    if (body.classList.contains("light-mode")) {
-        body.classList.remove("light-mode");
-        body.classList.add("dark-mode");
-        localStorage.setItem("mode", "dark");
-    } else {
-        body.classList.remove("dark-mode");
-        body.classList.add("light-mode");
-        localStorage.setItem("mode", "light");
-    }
-}
-
-window.onload = function() {
-    let mode = localStorage.getItem("mode");
-    if (mode === "dark") {
-        document.getElementById("body").classList.remove("light-mode");
-        document.getElementById("body").classList.add("dark-mode");
-    }
-}
-</script>
+</div>
 
 </body>
 </html>
