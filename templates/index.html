@@ -23,13 +23,30 @@ body {
 }
 
 /* CARDS */
-.card-box {
-    background: rgba(255,255,255,0.08);
-    backdrop-filter: blur(10px);
-    border-radius:15px;
-    padding:15px;
-    margin-bottom:15px;
-}
+<div class="row mb-3">
+
+<div class="col-md-4">
+<div class="card p-3 bg-primary text-white">
+<h5>Patients</h5>
+<h2>{{ total }}</h2>
+</div>
+</div>
+
+<div class="col-md-4">
+<div class="card p-3 bg-success text-white">
+<h5>Appointments</h5>
+<h2>{{ appointments }}</h2>
+</div>
+</div>
+
+<div class="col-md-4">
+<div class="card p-3 bg-warning text-white">
+<h5>Doctors</h5>
+<h2>{{ doctors }}</h2>
+</div>
+</div>
+
+</div>
 
 /* STATS */
 .stats {
