@@ -3,81 +3,153 @@
 <head>
 <title>Welcome</title>
 
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <style>
 
 body {
     margin: 0;
+    padding: 0;
     overflow: hidden;
     font-family: 'Segoe UI', sans-serif;
 }
 
+/* FULL SCREEN SLIDES */
 .slide {
-    height: 100vh;
     width: 100%;
+    height: 100vh;
     display: none;
     justify-content: center;
     align-items: center;
     text-align: center;
     color: white;
     flex-direction: column;
+    padding: 20px;
+    animation: fadeIn 0.6s ease;
 }
 
+/* ACTIVE */
 .active {
     display: flex;
 }
 
-/* COLORS */
-.s1 { background: linear-gradient(135deg, #667eea, #764ba2); }
-.s2 { background: linear-gradient(135deg, #43e97b, #38f9d7); }
-.s3 { background: linear-gradient(135deg, #ff6a00, #ee0979); }
+/* PREMIUM GRADIENTS */
+.slide1 {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+}
 
-button {
-    margin-top: 20px;
-    padding: 10px 25px;
-    border: none;
-    border-radius: 10px;
-    background: white;
-    color: black;
+.slide2 {
+    background: linear-gradient(135deg, #00c6ff, #0072ff);
+}
+
+.slide3 {
+    background: linear-gradient(135deg, #11998e, #38ef7d);
+}
+
+/* TEXT */
+h1 {
+    font-size: 32px;
     font-weight: bold;
 }
 
-</style>
+p {
+    font-size: 16px;
+    opacity: 0.9;
+}
 
+/* BUTTON */
+.btn-custom {
+    margin-top: 20px;
+    padding: 10px 25px;
+    border-radius: 25px;
+    border: none;
+    background: white;
+    color: black;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.btn-custom:hover {
+    transform: scale(1.05);
+}
+
+/* DOTS */
+.dots {
+    position: absolute;
+    bottom: 20px;
+    display: flex;
+    gap: 8px;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    background: white;
+    opacity: 0.4;
+    border-radius: 50%;
+}
+
+.dot.active {
+    opacity: 1;
+}
+
+/* ANIMATION */
+@keyframes fadeIn {
+    from {opacity: 0; transform: translateY(20px);}
+    to {opacity: 1;}
+}
+
+</style>
 </head>
 
 <body>
 
-<div class="slide s1 active">
+<!-- SLIDE 1 -->
+<div class="slide slide1 active">
     <h1>🏥 Welcome</h1>
-    <h3>Hospital Management System</h3>
-    <button onclick="nextSlide()">Next</button>
+    <p>Hospital Management System</p>
+    <button class="btn-custom" onclick="nextSlide()">Next</button>
 </div>
 
-<div class="slide s2">
-    <h1>📋 Our Services</h1>
-    <p>Patient Management</p>
-    <p>Doctor Management</p>
-    <p>Appointments Booking</p>
-    <button onclick="nextSlide()">Next</button>
+<!-- SLIDE 2 -->
+<div class="slide slide2">
+    <h1>💊 Our Services</h1>
+    <p>Patient Management, Doctors & Appointments</p>
+    <button class="btn-custom" onclick="nextSlide()">Next</button>
 </div>
 
-<div class="slide s3">
+<!-- SLIDE 3 -->
+<div class="slide slide3">
     <h1>🚀 Get Started</h1>
-    <p>Manage everything in one place</p>
-    <a href="/login"><button>Login</button></a>
+    <p>Manage your hospital efficiently</p>
+    <a href="/login" class="btn-custom">Start Now</a>
+</div>
+
+<!-- DOTS -->
+<div class="dots" style="left:50%; transform:translateX(-50%);">
+    <div class="dot active"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
 </div>
 
 <script>
+
 let current = 0;
-let slides = document.querySelectorAll(".slide");
+const slides = document.querySelectorAll(".slide");
+const dots = document.querySelectorAll(".dot");
 
 function nextSlide() {
     slides[current].classList.remove("active");
+    dots[current].classList.remove("active");
+
     current++;
+
     slides[current].classList.add("active");
+    dots[current].classList.add("active");
 }
+
 </script>
 
 </body>
