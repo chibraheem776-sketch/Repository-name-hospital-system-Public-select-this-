@@ -70,22 +70,23 @@ def dashboard():
 
     patients = c.fetchall()
 
+    # counts
     c.execute("SELECT COUNT(*) FROM patients")
-    total_patients = c.fetchone()[0]
+    total = c.fetchone()[0]
 
     c.execute("SELECT COUNT(*) FROM appointments")
-    total_appointments = c.fetchone()[0]
+    appointments_count = c.fetchone()[0]
 
-    doctors = 5
+    doctors_count = 5
 
     conn.close()
 
     return render_template(
         "index.html",
         patients=patients,
-        total=total_patients,
-        appointments=total_appointments,
-        doctors=doctors
+        total=total,
+        appointments_count=appointments_count,
+        doctors_count=doctors_count
     )
 
 # ADD PATIENT
