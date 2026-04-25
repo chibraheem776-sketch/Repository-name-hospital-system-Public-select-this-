@@ -53,7 +53,6 @@ def login():
     return render_template("login.html")
 
 # DASHBOARD
-
 @app.route("/dashboard")
 def dashboard():
     if "user" not in session:
@@ -79,28 +78,9 @@ def dashboard():
     c.execute("SELECT COUNT(*) FROM appointments")
     appointments_count = c.fetchone()[0]
 
-    # 🔥 NEW: real doctors count (dynamic)
+    # 🔥 dynamic doctors count
     c.execute("SELECT COUNT(*) FROM doctors")
     doctors_count = c.fetchone()[0]
-
-    conn.close()
-
-    return render_template(
-        "index.html",
-        patients=patients,
-        total=total,
-        appointments_count=appointments_count,
-        doctors_count=doctors_count
-    )
-
-    # counts
-    c.execute("SELECT COUNT(*) FROM patients")
-    total = c.fetchone()[0]
-
-    c.execute("SELECT COUNT(*) FROM appointments")
-    appointments_count = c.fetchone()[0]
-
-    doctors_count = 5
 
     conn.close()
 
@@ -191,13 +171,11 @@ def appointments():
     return render_template("appointments.html", data=data)
 
 # DOCTORS
-
 @app.route("/doctors", methods=["GET", "POST"])
 def doctors():
     conn = get_db()
     c = conn.cursor()
 
-    # table create
     c.execute("""
     CREATE TABLE IF NOT EXISTS doctors (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -206,19 +184,18 @@ def doctors():
     )
     """)
 
-    # insert doctor
     if request.method == "POST":
         c.execute("INSERT INTO doctors (name, specialty) VALUES (?, ?)",
                   (request.form["name"], request.form["specialty"]))
         conn.commit()
 
-    # fetch doctors
     c.execute("SELECT * FROM doctors")
     data = c.fetchall()
 
     conn.close()
 
     return render_template("doctors.html", data=data)
+
 # ADMIN
 @app.route("/admin")
 def admin():
@@ -231,14 +208,15 @@ def admin():
     c.execute("SELECT COUNT(*) FROM appointments")
     total_appointments = c.fetchone()[0]
 
-    doctors = 5
+    c.execute("SELECT COUNT(*) FROM doctors")
+    total_doctors = c.fetchone()[0]
 
     conn.close()
 
     return render_template("admin.html",
                            patients=total_patients,
                            appointments=total_appointments,
-                           doctors=doctors)
+                           doctors=total_doctors)
 
 # LOGOUT
 @app.route("/logout")
