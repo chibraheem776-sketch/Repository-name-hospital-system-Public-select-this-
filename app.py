@@ -169,10 +169,33 @@ def appointments():
     return render_template("appointments.html", data=data)
 
 # DOCTORS
-@app.route("/doctors")
+@app.route("/doctors", methods=["GET", "POST"])
 def doctors():
-    return render_template("doctors.html")
+    conn = get_db()
+    c = conn.cursor()
 
+    # table create
+    c.execute("""
+    CREATE TABLE IF NOT EXISTS doctors (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT,
+        specialty TEXT
+    )
+    """)
+
+    # insert doctor
+    if request.method == "POST":
+        c.execute("INSERT INTO doctors (name, specialty) VALUES (?, ?)",
+                  (request.form["name"], request.form["specialty"]))
+        conn.commit()
+
+    # fetch doctors
+    c.execute("SELECT * FROM doctors")
+    data = c.fetchall()
+
+    conn.close()
+
+    return render_template("doctors.html", data=data)
 # ADMIN
 @app.route("/admin")
 def admin():
