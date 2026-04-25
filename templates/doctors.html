@@ -8,6 +8,7 @@
 <div class="container mt-4">
 <h2>Doctors</h2>
 
+<!-- FORM -->
 <form method="POST">
 <input name="name" placeholder="Doctor Name" class="form-control mb-2">
 <input name="specialty" placeholder="Specialty" class="form-control mb-2">
@@ -16,9 +17,23 @@
 
 <hr>
 
-{% for d in doctors %}
-<p>{{ d[1] }} - {{ d[2] }}</p>
+<!-- DOCTORS LIST -->
+<h4>Doctors List</h4>
+
+<table class="table table-striped">
+<tr>
+<th>Name</th>
+<th>Specialty</th>
+</tr>
+
+{% for d in data %}
+<tr>
+<td>{{ d[1] }}</td>
+<td>{{ d[2] }}</td>
+</tr>
 {% endfor %}
+
+</table>
 
 </div>
 </body>

@@ -53,6 +53,7 @@ def login():
     return render_template("login.html")
 
 # DASHBOARD
+
 @app.route("/dashboard")
 def dashboard():
     if "user" not in session:
@@ -63,13 +64,34 @@ def dashboard():
 
     search = request.args.get("search")
 
-    # 🔥 FIXED SEARCH LOGIC
+    # search logic
     if search and search.strip() != "":
         c.execute("SELECT * FROM patients WHERE name LIKE ?", ('%' + search.strip() + '%',))
     else:
         c.execute("SELECT * FROM patients")
 
     patients = c.fetchall()
+
+    # counts
+    c.execute("SELECT COUNT(*) FROM patients")
+    total = c.fetchone()[0]
+
+    c.execute("SELECT COUNT(*) FROM appointments")
+    appointments_count = c.fetchone()[0]
+
+    # 🔥 NEW: real doctors count (dynamic)
+    c.execute("SELECT COUNT(*) FROM doctors")
+    doctors_count = c.fetchone()[0]
+
+    conn.close()
+
+    return render_template(
+        "index.html",
+        patients=patients,
+        total=total,
+        appointments_count=appointments_count,
+        doctors_count=doctors_count
+    )
 
     # counts
     c.execute("SELECT COUNT(*) FROM patients")
@@ -169,6 +191,7 @@ def appointments():
     return render_template("appointments.html", data=data)
 
 # DOCTORS
+
 @app.route("/doctors", methods=["GET", "POST"])
 def doctors():
     conn = get_db()
